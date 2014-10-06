@@ -110,7 +110,7 @@ If you have Yeost or All in one SEO, the settings for home page will be controll
 in V2 and 3 we plan to move all the important functions into Little Hippo so you will not even 
 need to use these other plugins.
 
-= Why are Meta Title / Meta Desc fields highlighted as red?
+= Why are Meta Title / Meta Desc fields highlighted as red? =
 If you have posts/pages that have not had a Meta Title or a Meta Desc defined, Little Hippo 
 will suggest values for you. Little Hippo creates a default title from the post/page title 
 and a description from the first 155 characters of the content. If these values have not been 
@@ -122,9 +122,12 @@ Yes of course, please contact us and we can discuss how we can help!
 
 == Screenshots ==
 
-![Little Hippo Dashboard](assets/screenshot-1.png "Screenshot of Little Hippo Dashboard")
+![Little Hippo Dashboard](/assets/screenshot-1.png "Screenshot of Little Hippo Dashboard")
 
 == Changelog ==
+= 0.4.5 Beta =
+* Minor fixes
+* Massive code cleanup removing unneeded sections
 
 = 0.4.4 Beta =
 * Minor bug updates
