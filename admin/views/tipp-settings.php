@@ -192,41 +192,41 @@ $to_trash_url = esc_url(wp_nonce_url( admin_url('admin-ajax.php?action=tipp_empt
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<div class="panel-title">Tracking</div>
+				<div class="panel-title"><?php _e('Tracking', $this->plugin_slug); ?></div>
 			</div>
 			<div class="panel-body">
 				<div class="form-group settings-tracking">
-					<label class="col-sm-3 control-label text-right">Google Analytics ID:</label>
+					<label class="col-sm-3 control-label text-right"><?php _e('Google Analytics ID', $this->plugin_slug); ?>:</label>
 					<div class="col-sm-9">
 						<input type="text" class="form-control" name="hippo_ga_id" value="<?php echo esc_attr( get_option('hippo_ga_id') ); ?>" />
-						<p>Enter your Google Tracking ID. It is formatted like this UA-######-#.</p>
+						<p><?php _e('Enter your Google Tracking ID. It is formatted like this', $this->plugin_slug); ?> UA-######-#.</p>
 					</div>
 				</div>
 				<div class="form-group settings-tracking">
-					<label class="col-sm-3 control-label text-right">Bounce Rate Timeout:</label>
+					<label class="col-sm-3 control-label text-right"><?php _e('Bounce Rate Timeout', $this->plugin_slug); ?>:</label>
 					<div class="col-sm-9">
 						<input type="text" class="form-control" name="hippo_ga_te_to" value="<?php echo esc_attr( get_option('hippo_ga_te_to', 10000) ); ?>" />
-						<p>Number of milli-seconds before a click is <b>NOT</b> considered a bounce.</p>
+						<p><?php _e('Number of milli-seconds before a click is NOT considered a bounce', $this->plugin_slug); ?>.</p>
 					</div>
 				</div>
 				<div class="form-group settings-tracking">
 					<div class="checkbox">
 						<label class="col-sm-9 control-label">
-						<input type="checkbox" name="hippo_ga_off" <?php echo (get_option('hippo_ga_off')) ? 'checked="checked" ': ''; ?>/> Click here to turn <strong>OFF</strong> Little Hippo Auto Insertion of the Tracking code
+						<input type="checkbox" name="hippo_ga_off" <?php echo (get_option('hippo_ga_off')) ? 'checked="checked" ': ''; ?>/> <?php _e('Click here to turn OFF Little Hippo Auto Insertion of the Tracking code', $this->plugin_slug); ?>
 						</label>
 						<p class="clearfix">&nbsp;</p>
-						<p class="clearfix text-danger"><strong>WARNING:</strong> Having the tracking code inserted more than once will cause your website to return errors and possibly drop in search engine rankings. If you have another plug-in that inserts the code, you can turn off the Little Hippo auto-insertion here.</p>
+						<p class="clearfix text-danger"><strong><?php _e('WARNING', $this->plugin_slug); ?>:</strong> <?php _e('Having the tracking code inserted more than once will cause your website to return errors and possibly drop in search engine rankings. If you have another plug-in that inserts the code, you can turn off the Little Hippo auto-insertion here', $this->plugin_slug); ?>.</p>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<div class="panel-title">Facebook OG Tags</div>
+				<div class="panel-title"><?php _e('Facebook OG Tags', $this->plugin_slug); ?></div>
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
-					<label class="col-sm-3 control-label">Default Site Image</label>
+					<label class="col-sm-3 control-label"><?php _e('Default Site Image', $this->plugin_slug); ?></label>
 					<div class="col-sm-9">
 						<input type="text" class="form-control" name="fb_og_default_img" id="upload_image" value="<?php echo esc_attr( get_option('fb_og_default_img') ); ?>" />
 						<input id="upload_image_button" class="button" type="button" value="Upload Image" />
@@ -252,11 +252,11 @@ $to_trash_url = esc_url(wp_nonce_url( admin_url('admin-ajax.php?action=tipp_empt
 	<div class="col-sm-4">
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<div class="panel-title">About Little Hippo <small>ver. <?php echo constant("TIPP::VERSION"); ?> Beta</small></div>
+				<div class="panel-title"><?php _e('About Little Hippo', $this->plugin_slug); ?> <small>ver. <?php echo constant("TIPP::VERSION"); ?> Beta</small></div>
 			</div>
 			<div class="panel-body">
 				<p><a href="http://littlehippo.co">Little Hippo SEO Tools</a> by <a href="http://dosa.io">DoSA</a>, <a href="http://www.dsa-global.com">DSA-Global</a></p>
-				<p>To ensure that we can continue development on this tool, and we are looking to build the best darn SEO tool that we can, we need you to assist us in the development.</p>
+				<p><?php _e('To ensure that we can continue development on this tool, and we are looking to build the best darn SEO tool that we can, we need you to assist us in the development', $this->plugin_slug); ?>.</p>
 				<div class="col-xs-6">
 					<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=payments%40dosa%2eio&lc=US&item_name=Feed%20the%20Hippo%20Donation&amount=5%2e00&currency_code=USD&button_subtype=services&no_note=0&tax_rate=0%2e000&shipping=0%2e00&bn=PP%2dBuyNowBF%3abtn_buynowCC_LG%2egif%3aNonHostedGuest" target="_new"><img src="<?php echo $images_basename; ?>/Feed-the-Hippo.png" class="img-responsive" /></a>
 				</div>
@@ -270,7 +270,7 @@ $to_trash_url = esc_url(wp_nonce_url( admin_url('admin-ajax.php?action=tipp_empt
 		</div>
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<div class="panel-title">Support</small></div>
+				<div class="panel-title"><?php _e('Support', $this->plugin_slug); ?></small></div>
 			</div>
 			<div class="panel-body">
 				<div class="col-xs-6">

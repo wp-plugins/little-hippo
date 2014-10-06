@@ -2,7 +2,7 @@
 /**
  * Little Hippo front end class
  *
- * @package   Tipp
+ * @package   Little Hippo
  * @author    Eric Buckley <eric@dosa.io>
  * @license   GPL-2.0+
  * @link      http://littlehippo.co
@@ -10,7 +10,7 @@
  */
 
 /**
- * @package   tipp
+ * @package   Tipp
  * @author    Eric Buckley <eric@dosa.io>
  */
 class Tipp {
@@ -21,7 +21,7 @@ class Tipp {
 	 * @since   0.0.0
 	 * @var     string
 	 */
-	const VERSION = '0.4.4';
+	const VERSION = '0.4.5';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -34,7 +34,7 @@ class Tipp {
 	 * @since    0.0.0
 	 * @var      string
 	 */
-	protected $plugin_slug = 'tipp';
+	protected $plugin_slug = 'little-hippo';
 
 	/**
 	 * Instance of this class.
@@ -78,14 +78,6 @@ class Tipp {
 			add_filter( 'the_content', array( $this, 'hippo_nf_parse' ) );
 		}
 
-		/* Define custom functionality.
-		 * Refer To http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
-		 */
-		// add_action( '@TODO', array( $this, 'action_method_name' ) );
-		// add_filter( 'get_image_tag', array( $this, 'restructure_images' ) );
-
-		/* Testing only */
-		// add_filter( 'the_content', array( $this, 'show_meta_values' ) );
 	}
 
 	/**
@@ -280,19 +272,6 @@ class Tipp {
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'assets/js/public.js', __FILE__ ), array( 'jquery' ), self::VERSION );
-	}
-
-	/**
-	 * NOTE:  Actions are points in the execution of a page or process
-	 *        lifecycle that WordPress fires.
-	 *
-	 *        Actions:    http://codex.wordpress.org/Plugin_API#Actions
-	 *        Reference:  http://codex.wordpress.org/Plugin_API/Action_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function action_method_name() {
-		// @TODO: Define your action hook callback here
 	}
 
 	public function hippo_head() {
@@ -565,15 +544,6 @@ class Tipp {
 		}
 	}
 
-	/**
-	 * NOTE:  Filters are points of execution in which WordPress modifies data
-	 *        before saving it or sending it to the browser.
-	 *
-	 *        Filters: http://codex.wordpress.org/Plugin_API#Filters
-	 *        Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
-	 *
-	 * @since    1.0.0
-	 */
 	public function restructure_images($attr) {
 		
 

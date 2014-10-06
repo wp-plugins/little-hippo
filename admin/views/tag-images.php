@@ -11,23 +11,13 @@
  * @link      http://www.siamcomm.com/tools/tipp
  * @copyright 2014 Siam Communications & Eric Buckley
  */
+
+$media_items = $this->action_get_media( '0' );
 ?>
 
 <div class="wrap">
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
-	<p>Tag "Images" and other attachments that are not specifically assigned to a post or page.</p>
-<?php /*
-$posts_args = array(
-	'post_type' => 'post',
-);
-$posts_tipp = new WP_Query( $posts_args );
-
-if ($posts_tipp->have_posts()) : 
-	while ($posts_tipp->have_posts()) : $posts_tipp->the_post();
-		global $post;
-*/
-		$media_items = $this->action_get_media( '0' );
-?>
+	<p><?php _e('Tag Images and other attachments that are not specifically assigned to a post or page', $this->plugin_slug); ?>.</p>
 	<div class="tipp_post_wrapper">
 		<div class="media_wrapper">
 <?php
@@ -42,9 +32,4 @@ if ($posts_tipp->have_posts()) :
 
 		</div>
 	</div>
-<?php /*
-	endwhile;
-endif;*/
-?>
-
 </div>

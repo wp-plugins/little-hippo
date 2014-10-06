@@ -14,7 +14,7 @@
 
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
-	<p>Tag all "Custom Post Types" and any media attached to them.</p>
+	<p><?php _e('Tag all Custom Post Types and any media attached to them', $this->plugin_slug); ?>.</p>
 <?php
 $cpt_args = array(
 	'public' => true,
@@ -91,10 +91,11 @@ if ($posts_tipp->have_posts()) :
 	</div>
 <?php
 	endwhile;
+	echo $this->tipp_pagination($pages, $_GET['page'], $cp, $post_type);
 endif;
 
 else:
-	echo '<div class="error"><p>There are no custom post types defined.</p></div>';
+	echo '<div class="error"><p>' . __('There are no custom post types defined', $this->plugin_slug) . '.</p></div>';
 endif; // have $post_types
 ?>
 		</div>

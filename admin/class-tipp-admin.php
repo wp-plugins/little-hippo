@@ -1,8 +1,8 @@
 <?php
 /**
- * Little Hippo Tools plug-in.
+ * Little Hippo Tools plug-in Admin functionality.
  *
- * @package   Tipp_Admin
+ * @package   Little Hippo
  * @author    Eric Buckley <eric@dosa.io>
  * @license   GPL-2.0+
  * @link      http://littlehippo.co
@@ -487,32 +487,6 @@ class Tipp_Admin {
 
 	}
 
-	/**
-	 * NOTE:     Actions are points in the execution of a page or process
-	 *           lifecycle that WordPress fires.
-	 *
-	 *           Actions:    http://codex.wordpress.org/Plugin_API#Actions
-	 *           Reference:  http://codex.wordpress.org/Plugin_API/Action_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function action_method_name() {
-		// @TODO: Define your action hook callback here
-	}
-
-	/**
-	 * NOTE:     Filters are points of execution in which WordPress modifies data
-	 *           before saving it or sending it to the browser.
-	 *
-	 *           Filters: http://codex.wordpress.org/Plugin_API#Filters
-	 *           Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function filter_method_name() {
-		// @TODO: Define your filter hook callback here
-	}
-
 	public function action_get_media( $post_parent = null ) {
 		$args = array( 
 			'post_type' => 'attachment', 
@@ -758,7 +732,6 @@ class Tipp_Admin {
 		return array( 
 			'SiteUrl' => get_bloginfo('url'), 
 			'AjaxUrl' => admin_url('admin-ajax.php'), 
-			'OtherText' => __('my text', "my_localization_name") 
 		);
 	}
 
@@ -774,7 +747,7 @@ class Tipp_Admin {
 			$desc 		= get_post_meta( $postid, get_option('meta_descr_field'), true );
 			$keywords	= get_post_meta( $postid, get_option('meta_kword_field'), true );
 
-			$desc_content = ltrim(trim(substr(wp_strip_all_tags($postobj->post_content, true), 0, 160)));
+			$desc_content = ltrim(trim(substr(wp_strip_all_tags($postobj->post_content, true), 0, get_option('char_limit_alt'))));
 
 			$seodata['title'] = (is_null($title) || $title == '') ? get_the_title($postid) : $title;
 			$seodata['desc'] = (is_null($desc) || $desc == '') ? $desc_content : $desc;
@@ -796,6 +769,123 @@ class Tipp_Admin {
 		}
 
 		return $str_value;
+	}
+
+	private function get_image_sizes( $size = '' ) {
+
+		global $_wp_additional_image_sizes;
+
+		$sizes = array();
+		$get_intermediate_image_sizes = get_intermediate_image_sizes();
+
+		// Create the full array with sizes and crop info
+		foreach( $get_intermediate_image_sizes as $_size ) {
+			if ( in_array( $_size, array( 'thumbnail', 'medium', 'large' ) ) ) {
+				$sizes[ $_size ]['width'] = get_option( $_size . '_size_w' );
+				$sizes[ $_size ]['height'] = get_option( $_size . '_size_h' );
+				$sizes[ $_size ]['crop'] = (bool) get_option( $_size . '_crop' );
+			} elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
+				$sizes[ $_size ] = array( 
+					'width' => $_wp_additional_image_sizes[ $_size ]['width'],
+					'height' => $_wp_additional_image_sizes[ $_size ]['height'],
+					'crop' =>  $_wp_additional_image_sizes[ $_size ]['crop']
+				);
+			}
+		}
+
+		// Get only 1 size if found
+		if ( $size ) {
+			if( isset( $sizes[ $size ] ) ) {
+				return $sizes[ $size ];
+			} else {
+				return false;
+			}
+		}
+
+		return $sizes;
+	}
+
+	private function rename_attachments( $attach_id, $new_filename ){
+		// get current attachment data
+		$image_attributes = wp_get_attachment_image_src( $attach_id, 'full' );
+		$sanitized_file = sanitize_file_name( $new_filename );
+		$parent_post = wp_get_post_parent_id( $attach_id );
+
+		$img = wp_get_image_editor( $image_attributes[0] );
+
+		if ( !is_wp_error($img) ){
+			$filetype = wp_check_filetype($image_attributes[0]);
+			// echo $filetype['ext']; // returns jpg
+			$path_parts = pathinfo($image_attributes[0]);
+
+			if (check_filename_format($sanitized_file)) {
+				$complete_filename = $path_parts['dirname'] . '/' . $sanitized_file;
+
+				// Rename Parent File
+				$saved = $img->save($complete_filename);
+
+				// Get the registered sizes
+				$reg_sizes = $this->get_image_sizes();
+
+				foreach($reg_sizes as $reg_name => $reg_data){
+					// Get a fresh copy of the image
+					$new_image = wp_get_image_editor( $complete_filename );
+
+					// Get/Set Cropping, Width and Height
+					$crop = ($reg_data['crop'] === 1) ? true: false;
+					// $suffix = $reg_data['width'] . 'x' . $reg_data['height'];
+
+					// Resize the image					
+					$new_image->resize( $reg_data['width'], $reg_data['height'], $crop);
+					$suffix = $new_image->suffix();
+
+					// Save as New file at Registered Size
+					$final = $new_image->generate_filename( $suffix, $complete_filename, NULL );
+					$new_image->save($final);
+
+					// Update old_filename in parent_post content
+				}
+			}
+		}
+	}
+
+	private function get_attach_data( $attach_id ){
+		$args = array( 
+			'post_type' => 'attachment', 
+			'posts_per_page' => -1,
+			'post_status' => 'inherit',
+			'p' => $attach_id
+		);
+		$hippo_attach = get_posts( $args );
+
+		return $hippo_attach;
+	}
+
+	private function update_content_filenames( $post_id, $new_filename ){
+
+	}
+
+	private function check_filename_format( $new_filename ){
+		$working_name = basename( $new_filename );
+		$pos = strrpos($working_name, '.');
+		if($pos === false) {
+			$file_ext = false;
+		} else {
+			$working_ext = substr($working_name, $pos, 4);
+
+			switch ($working_ext) {
+				case '.jpg':
+				case '.png':
+				case '.gif':
+					$file_ext = true;
+					break;
+				default:
+					$file_ext = false;
+					break;
+			}
+		}
+
+		return $file_ext;
 	}
 
 	public function hippo_empty_trash(){

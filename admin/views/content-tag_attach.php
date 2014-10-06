@@ -8,8 +8,6 @@
  * @link      http://littlehippo.co
  * @copyright 2014 DSA Co Ltd & Eric Buckley
  */
-
-$image = wp_get_image_editor( $image_attributes[0] );
 ?>
 
 			<form class="form-inline" role="form" action="" id="image-<?php echo $post->ID; ?>-<?php echo $attachment->ID; ?>">
@@ -39,7 +37,7 @@ $image = wp_get_image_editor( $image_attributes[0] );
 					<div class="ajax-loader hide" id="loader-<?php echo $attachment->ID; ?>"><img src="<?php echo plugins_url( '../assets/images/ajax-loader.gif', __FILE__ ); ?>" /></div>
 				</div>
 				<div class="tipp_cmd tipp_data col-sm-2" id="tipp_data_<?php echo $attachment->ID; ?>">
-					<button type="button" class="btn btn-default btn-sm btn-block" disabled="disabled"><?php _e('Rename File from Title', $this->plugin_slug); ?></button>
+					<button type="button" class="btn btn-primary btn-sm btn-block hide"><?php _e('Rename File from Title', $this->plugin_slug); ?></button>
 					<button type="button" class="btn btn-primary btn-sm btn-block update_tags" id="update_tags_<?php echo $attachment->ID; ?>" href="<?php echo $upd_tags_url; ?>"><?php _e('Update Image Tags', $this->plugin_slug); ?></button>
 				</div>
 			</div>
@@ -48,11 +46,11 @@ $image = wp_get_image_editor( $image_attributes[0] );
 				$ = jQuery;
 				$("#image-title-<?php echo $attachment->ID; ?>").characterCounter({
 					counterCssClass: "chars-title-<?php echo $attachment->ID; ?>",
-					limit: 65
+					limit: <?php echo get_option('img_limit_title'); ?>
 				});
 				$("#image-alt-<?php echo $attachment->ID; ?>").characterCounter({
 					counterCssClass: "chars-alt-<?php echo $attachment->ID; ?>",
-					limit: 255
+					limit: <?php echo get_option('img_limit_alt'); ?>
 				});
 				$(".bigimage-<?php echo $attachment->ID; ?>").tooltipster({
 					content: $('<img src="<?php echo $image_attributes[0]; ?>" width="500" />'),

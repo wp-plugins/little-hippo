@@ -2,11 +2,11 @@
 /**
  * Fired when the plugin is uninstalled.
  *
- * @package   Plugin_Name
- * @author    Your Name <email@example.com>
+ * @package   Little Hippo
+ * @author    Eric Buckley <eric@dosa.io>
  * @license   GPL-2.0+
- * @link      http://example.com
- * @copyright 2014 Your Name or Company Name
+ * @link      http://littlehippo.co
+ * @copyright 2014 DSA Co Ltd & Eric Buckley
  */
 
 // If uninstall not called from WordPress, then exit

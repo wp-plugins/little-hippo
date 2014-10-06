@@ -15,7 +15,7 @@
 
 <div class="wrap">
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
-	<p>Tag "Pages" and any media attached to them.</p>
+	<p><?php _e('Tag Pages and any media attached to them', $this->plugin_slug); ?>.</p>
 <?php
 $tp = wp_count_posts('page');
 $ap = intval($tp->publish) + intval($tp->draft) + intval($tp->future);
@@ -63,6 +63,7 @@ if ($posts_tipp->have_posts()) :
 	</div>
 <?php
 	endwhile;
+	echo $this->tipp_pagination($pages, $_GET['page'], $cp);
 endif;
 ?>
 

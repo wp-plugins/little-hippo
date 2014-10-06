@@ -11,11 +11,12 @@
  * @link      http://www.siamcomm.com/tools/tipp
  * @copyright 2014 Siam Communications & Eric Buckley
  */
+
 ?>
 
 <div class="wrap" id="tipp_content">
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
-	<p>Tag "Posts" and any media attached to them.</p>
+	<p><?php _e('Tag Posts and any media attached to them', $this->plugin_slug); ?>.</p>
 <?php
 $tp = wp_count_posts();
 $ap = intval($tp->publish) + intval($tp->draft) + intval($tp->future);
@@ -54,7 +55,8 @@ if ($posts_tipp->have_posts()) :
 <?php
 		foreach ($media_items as $attachment) {
 			$image_attributes = wp_get_attachment_image_src( $attachment->ID, 'full' );
-			$upd_tags_url = esc_url(wp_nonce_url( admin_url('admin-ajax.php?action=tipp_update_tags'), 'tipp-upd_tags'));
+			$image = wp_get_image_editor( $image_attributes[0] );
+			$upd_tags_url = esc_url(wp_nonce_url( admin_url('admin-ajax.php?action=tipp_update_tags'), 'tipp-upd_tags' ));
 			$ttclass = 'bigimage-' . $attachment->ID;
 
 			include('content-tag_attach.php');
@@ -65,6 +67,7 @@ if ($posts_tipp->have_posts()) :
 	</div>
 <?php
 	endwhile;
+	echo $this->tipp_pagination($pages, $_GET['page'], $cp);
 endif;
 ?>
 </div>

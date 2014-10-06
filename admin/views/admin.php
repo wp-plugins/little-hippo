@@ -21,8 +21,8 @@ $tipp_cpt 	= $this->tipp_get_cpt();
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
 	<div class="updated">
-		<p>You are using the <b><?php echo get_option('seo_plugin_name'); ?></b> SEO Plug-in.</p>
-		<p>These fields will be used for Pages, Posts and Custom Post Type Meta data.</p>
+		<p><?php _e('You are using the', $this->plugin_slug); ?> <b><?php echo get_option('seo_plugin_name'); ?></b> <?php _e('SEO Plug-in', $this->plugin_slug); ?>.</p>
+		<p><?php _e('These fields will be used for Pages, Posts and Custom Post Type Meta data', $this->plugin_slug); ?>.</p>
 	</div>
 
 	<h3>Content Summary</h3>
@@ -32,23 +32,23 @@ $tipp_cpt 	= $this->tipp_get_cpt();
 		</div>
 		<div class="col-xs-9">
 			<div class="progress">
-				<div class="progress-bar progress-bar-success" style="width: <?php echo $tipp_pages['publish']; ?>%">Published</div>
-				<div class="progress-bar progress-bar-warning progress-bar-striped" style="width: <?php echo $tipp_pages['future']; ?>%">Future</div>
+				<div class="progress-bar progress-bar-success" style="width: <?php echo $tipp_pages['publish']; ?>%"><?php _e('Published', $this->plugin_slug); ?></div>
+				<div class="progress-bar progress-bar-warning progress-bar-striped" style="width: <?php echo $tipp_pages['future']; ?>%"><?php _e('Future', $this->plugin_slug); ?></div>
 				<div class="progress-bar progress-bar-warning" style="width: <?php echo $tipp_pages['draft']; ?>%">Draft</div>
-				<div class="progress-bar progress-bar-info progress-bar-striped" style="width: <?php echo $tipp_pages['pending']; ?>%">Pending</div>
-				<div class="progress-bar progress-bar-info" style="width: <?php echo $tipp_pages['private']; ?>%">Private</div>
+				<div class="progress-bar progress-bar-info progress-bar-striped" style="width: <?php echo $tipp_pages['pending']; ?>%"><?php _e('Pending', $this->plugin_slug); ?></div>
+				<div class="progress-bar progress-bar-info" style="width: <?php echo $tipp_pages['private']; ?>%"><?php _e('Private', $this->plugin_slug); ?></div>
 			</div>
 		</div>
 		<div class="col-xs-2 text-right">
-			<p>Posts (<?php echo $tipp_posts['total']; ?>)</p>
+			<p><?php _e('Posts', $this->plugin_slug); ?> (<?php echo $tipp_posts['total']; ?>)</p>
 		</div>
 		<div class="col-xs-9">
 			<div class="progress">
-				<div class="progress-bar progress-bar-success" style="width: <?php echo $tipp_posts['publish']; ?>%">Published</div>
-				<div class="progress-bar progress-bar-warning progress-bar-striped" style="width: <?php echo $tipp_posts['future']; ?>%">Future</div>
-				<div class="progress-bar progress-bar-warning" style="width: <?php echo $tipp_posts['draft']; ?>%">Draft</div>
-				<div class="progress-bar progress-bar-info progress-bar-striped" style="width: <?php echo $tipp_posts['pending']; ?>%">Pending</div>
-				<div class="progress-bar progress-bar-info" style="width: <?php echo $tipp_posts['private']; ?>%">Private</div>
+				<div class="progress-bar progress-bar-success" style="width: <?php echo $tipp_posts['publish']; ?>%"><?php _e('Published', $this->plugin_slug); ?></div>
+				<div class="progress-bar progress-bar-warning progress-bar-striped" style="width: <?php echo $tipp_posts['future']; ?>%"><?php _e('Future', $this->plugin_slug); ?></div>
+				<div class="progress-bar progress-bar-warning" style="width: <?php echo $tipp_posts['draft']; ?>%"><?php _e('Draft', $this->plugin_slug); ?></div>
+				<div class="progress-bar progress-bar-info progress-bar-striped" style="width: <?php echo $tipp_posts['pending']; ?>%"><?php _e('Pending', $this->plugin_slug); ?></div>
+				<div class="progress-bar progress-bar-info" style="width: <?php echo $tipp_posts['private']; ?>%"><?php _e('Private', $this->plugin_slug); ?></div>
 			</div>
 		</div>
 	</div>
@@ -64,7 +64,7 @@ $tipp_cpt 	= $this->tipp_get_cpt();
 		</div>
 		<div class="col-xs-9">
 			<div class="progress">
-				<div class="progress-bar progress-bar-danger" style="width: 100%">Nothing Found</div>
+				<div class="progress-bar progress-bar-danger" style="width: 100%"><?php _e('Nothing Found', $this->plugin_slug); ?></div>
 			</div>
 		</div>
 
@@ -110,7 +110,7 @@ endif; // end of have custom post types
 			<h3><?php echo $this->format_value($total_meta + $total_images) . " " . __('Total Issues Found', $this->plugin_slug); ?></h3>
 			<ul class="nav nav-tabs" role="tablist" id="issues">
 				<li class="active"><a href="#meta" role="tab" data-toggle="tab"><h4><b><?php echo $this->format_value($total_meta); ?></b> Meta Issues</h4></a></li>
-				<li><a href="#images" role="tab" data-toggle="tab"><h4><b><?php echo $this->format_value($total_images); ?></b> Image Issues</h4></a></li>
+				<li><a href="#images" role="tab" data-toggle="tab"><h4><b><?php echo $this->format_value($total_images); ?></b> <?php _e('Image Issues', $this->plugin_slug); ?></h4></a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane fade in active" id="meta">
