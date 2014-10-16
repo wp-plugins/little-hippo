@@ -2,18 +2,16 @@
 /**
  * Represents the view for tagging Custom Post Types.
  *
- * @package   tipp
- * @author    Eric Buckley <ebuckley@siamcomm.com>
+ * @package   TippAdmin
+ * @author    Eric Buckley <eric@dosa.io>
  * @license   GPL-2.0+
- * @link      http://www.siamcomm.com/tools/tipp
- * @copyright 2014 Siam Communications & Eric Buckley
+ * @link      http://littlehippo.co
+ * @copyright 2014 DSA Co Ltd & Eric Buckley
  */
 ?>
 
-<div class="wrap">
-
+<div class="wrap" id="tipp_content">
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
-
 	<p><?php _e('Tag all Custom Post Types and any media attached to them', $this->plugin_slug); ?>.</p>
 <?php
 $cpt_args = array(

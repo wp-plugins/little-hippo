@@ -21,7 +21,7 @@ class Tipp {
 	 * @since   0.0.0
 	 * @var     string
 	 */
-	const VERSION = '0.4.5';
+	const VERSION = '1.0.0';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -62,6 +62,10 @@ class Tipp {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		// Cleanup the WordPress Head area
+		if (get_option('hippo_head_cleanup') == 'on'){
+			add_action('init', array( $this, 'hippo_head_cleanup' ) );
+		}
 		// The head function calls action hippo_wp_head, where we can hook all more functionality
 		if ( get_option('seo_plugin') === 'HIPPO' ):
 
@@ -119,28 +123,22 @@ class Tipp {
 	public static function activate( $network_wide ) {
 
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-
 			if ( $network_wide  ) {
-
 				// Get all blog ids
 				$blog_ids = self::get_blog_ids();
 
 				foreach ( $blog_ids as $blog_id ) {
-
 					switch_to_blog( $blog_id );
 					self::single_activate();
 
 					restore_current_blog();
 				}
-
 			} else {
 				self::single_activate();
 			}
-
 		} else {
 			self::single_activate();
 		}
-
 	}
 
 	/**
@@ -156,29 +154,22 @@ class Tipp {
 	public static function deactivate( $network_wide ) {
 
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-
 			if ( $network_wide ) {
-
 				// Get all blog ids
 				$blog_ids = self::get_blog_ids();
 
 				foreach ( $blog_ids as $blog_id ) {
-
 					switch_to_blog( $blog_id );
 					self::single_deactivate();
 
 					restore_current_blog();
-
 				}
-
 			} else {
 				self::single_deactivate();
 			}
-
 		} else {
 			self::single_deactivate();
 		}
-
 	}
 
 	/**
@@ -197,7 +188,6 @@ class Tipp {
 		switch_to_blog( $blog_id );
 		self::single_activate();
 		restore_current_blog();
-
 	}
 
 	/**
@@ -220,7 +210,6 @@ class Tipp {
 			AND deleted = '0'";
 
 		return $wpdb->get_col( $sql );
-
 	}
 
 	/**
@@ -253,7 +242,6 @@ class Tipp {
 
 		load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );
 		load_plugin_textdomain( $domain, FALSE, basename( plugin_dir_path( dirname( __FILE__ ) ) ) . '/languages/' );
-
 	}
 
 	/**
@@ -295,6 +283,28 @@ class Tipp {
 
 		return;
 	}
+
+	public function hippo_head_cleanup() {
+		// category feeds
+		// remove_action( 'wp_head', 'feed_links_extra', 3 );
+		// post and comment feeds
+		// remove_action( 'wp_head', 'feed_links', 2 );
+		// EditURI link
+		remove_action( 'wp_head', 'rsd_link' );
+		// windows live writer
+		remove_action( 'wp_head', 'wlwmanifest_link' );
+		// index link
+		remove_action( 'wp_head', 'index_rel_link' );
+		// previous link
+		remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 );
+		// start link
+		remove_action( 'wp_head', 'start_post_rel_link', 10, 0 );
+		// links for adjacent posts
+		remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0 );
+		// WP version
+		remove_action( 'wp_head', 'wp_generator' );
+	} /* end hippo head cleanup */
+
 
 	/**
 	 * Outputs the meta description element and text.

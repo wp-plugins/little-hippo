@@ -16,6 +16,10 @@ add_filter( 'cmb_meta_boxes', 'hippo_metaboxes' );
  * @return array
  */
 function hippo_metaboxes( array $meta_boxes ) {
+	global $dash;
+
+	$pt = $dash->avail_posttypes( true );
+
 	$seo_pages = array('page','post');
 	$cpt_args = array(
 		'public' => true,
@@ -36,20 +40,20 @@ function hippo_metaboxes( array $meta_boxes ) {
 	$meta_boxes['hippo_seo'] = array(
 		'id'         => 'hippo_seo',
 		'title'      => __( 'Little Hippo SEO', 'cmb' ),
-		'pages'      => $seo_pages, // Post type
+		'pages'      => $pt, // Post type
 		'context'    => 'normal',
 		'priority'   => 'high',
 		'show_names' => true, // Show field names on the left
 		'fields'     => array(
 			array(
 				'name' => __( 'Meta Title', 'cmb' ),
-				'desc' => __( 'Enter the value for the Meta Title tag', 'cmb' ),
+				'desc' => __( 'Enter the value for the Meta Title tag (55 characters max. recommended)', 'cmb' ),
 				'id'   => $prefix . 'seo_title',
 				'type' => 'text',
 			),
 			array(
 				'name' => __( 'Meta Description', 'cmb' ),
-				'desc' => __( 'Up to 160 characters maximum for the meta description.', 'cmb' ),
+				'desc' => __( 'Maximum of 155 characters recommended for the meta description.', 'cmb' ),
 				'id'   => $prefix . 'seo_metadesc',
 				'type' => 'textarea_small',
 			),

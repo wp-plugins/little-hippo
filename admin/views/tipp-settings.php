@@ -12,14 +12,14 @@
  * @copyright 2014 DSA Co Ltd & Eric Buckley
  */
 
-$images_basename = get_bloginfo('home') . '/wp-content/plugins/' . plugin_basename( plugin_dir_path( realpath( dirname( __FILE__ ) ) ) . '/assets/images' );
+$images_basename = get_bloginfo('url') . '/wp-content/plugins/' . plugin_basename( plugin_dir_path( realpath( dirname( __FILE__ ) ) ) . '/assets/images' );
 $to_trash_url = esc_url(wp_nonce_url( admin_url('admin-ajax.php?action=tipp_empty_trash'), 'tipp-to_trash'));
 ?>
 
 <div class="wrap">
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 	<div class="col-xs-8">
-		<div class="panel panel-default">
+		<div class="panel panel-default hide">
 			<div class="panel-heading">
 				<div class="panel-title"><?php _e('Subscribe to our Newsletter', $this->plugin_slug); ?></div>
 			</div>
@@ -47,14 +47,47 @@ $to_trash_url = esc_url(wp_nonce_url( admin_url('admin-ajax.php?action=tipp_empt
 				<div class="form-group">
 					<div class="checkbox">
 						<label class="col-sm-10 control-label">
+						<input type="checkbox" name="hippo_head_cleanup" <?php echo (get_option('hippo_head_cleanup')) ? 'checked="checked" ': ''; ?>/> <?php _e('WP Head Cleanup (remove version, rel links, etc.)', $this->plugin_slug); ?>
+						</label>
+						<div class="clear-fix">&nbsp;</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="checkbox">
+						<label class="col-sm-10 control-label">
+						<input type="checkbox" name="hippo_help_off" <?php echo (get_option('hippo_help_off')) ? 'checked="checked" ': ''; ?>/> <?php _e('Turn off Assist and Tip notifications.', $this->plugin_slug); ?>
+						</label>
+						<div class="clear-fix">&nbsp;</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="checkbox">
+						<label class="col-sm-11 control-label">
 						<input type="checkbox" name="hippo_outbound_nf" <?php echo (get_option('hippo_outbound_nf')) ? 'checked="checked" ': ''; ?>/> <?php _e('No-Follow outbound links', $this->plugin_slug); ?> (<i><strong><?php _e('NOTE', $this->plugin_slug); ?>:</strong> <?php _e('Only works for links inserted into the CONTENT area', $this->plugin_slug); ?></i>.)
 						</label>
 						<div class="clear-fix">&nbsp;</div>
-						<div class="text-danger"></div>
 					</div>
 				</div>
 				<h4><?php _e('Cleanup',$this->plugin_slug); ?></h4>
-				<p><button type="button" class="btn btn-primary btn-sm lh-empty-trash" href="<?php echo $to_trash_url; ?>"><?php _e('Empty Trash', $this->plugin_slug); ?></button> <span class="trash-loader hide" id="trash_activity"><img src="<?php echo plugins_url( '../assets/images/ajax-loader.gif', __FILE__ ); ?>" /></span><span class="trash_status hide"></span></p>
+				<div class="form-group">
+					<label class="col-sm-3 control-label text-right"><?php _e('Post Revisions Kept', $this->plugin_slug); ?><br />(<?php _e('0 to disable', $this->plugin_slug); ?>):</label>
+					<div class="col-sm-6">
+					<?php $hippo_rev = (!get_option('hippo_revisions') || get_option('hippo_revisions') === '' || is_null(get_option('hippo_revisions'))) ? 5: get_option('hippo_revisions'); ?>
+						<input type="text" class="form-control" name="hippo_revisions" value="<?php echo esc_attr( $hippo_rev ); ?>" />
+					</div>
+					<div class="col-sm-3">&nbsp;</div>
+				</div>
+				<div><p>&nbsp;</p></div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label text-right"><?php _e('Auto-Save Interval (seconds)', $this->plugin_slug); ?>:</label>
+					<div class="col-sm-6">
+					<?php $hippo_as_int = (!get_option('hippo_autosave_interval') || get_option('hippo_autosave_interval') === '' || is_null(get_option('hippo_autosave_interval'))) ? 300: get_option('hippo_autosave_interval'); ?>
+						<input type="text" class="form-control" name="hippo_autosave_interval" value="<?php echo esc_attr( $hippo_as_int ); ?>" />
+					</div>
+					<div class="col-sm-3">&nbsp;</div>
+				</div>
+				<div><p>&nbsp;</p></div>
+				<p><button type="button" class="btn btn-warning btn-sm lh-empty-trash" href="<?php echo $to_trash_url; ?>"><?php _e('Empty Trash', $this->plugin_slug); ?></button> <span class="trash-loader hide" id="trash_activity"><img src="<?php echo plugins_url( '../assets/images/ajax-loader.gif', __FILE__ ); ?>" /></span><span class="trash_status hide"></span></p>
 			</div>
 		</div>
 

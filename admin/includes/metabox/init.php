@@ -7,7 +7,7 @@ Contributors: WebDevStudios (@webdevstudios / webdevstudios.com)
               Bill Erickson (@billerickson / billerickson.net)
               Andrew Norcross (@norcross / andrewnorcross.com)
 Description:  This will create metaboxes with custom fields that will blow your mind.
-Version:      1.2.0
+Version:      1.2.0 Modified for Little Hippo
 */
 
 /**
@@ -247,6 +247,7 @@ class cmb_Meta_Box {
 		$styles = array();
 
 		// if we're 3.5 or later, user wp-color-picker
+		/*
 		if ( 3.5 <= $wp_version ) {
 			$scripts[] = 'wp-color-picker';
 			$styles[] = 'wp-color-picker';
@@ -268,6 +269,7 @@ class cmb_Meta_Box {
 		}
 		wp_register_script( 'cmb-datepicker', CMB_META_BOX_URL . 'js/jquery.datePicker.min.js' );
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
+		*/
 		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL .'js/cmb'. $min .'.js', $scripts, self::CMB_VERSION );
 
 		wp_enqueue_media();
@@ -415,7 +417,6 @@ class cmb_Meta_Box {
 		echo '</table>';
 		do_action( 'cmb_after_table', $meta_box, $object_id, $object_type );
 		echo "\n<!-- End CMB Fields -->\n";
-
 	}
 
 	/**

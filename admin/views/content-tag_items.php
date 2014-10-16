@@ -15,12 +15,23 @@ $descr_class = (get_post_meta( $post->ID, get_option('meta_descr_field'), true )
 
 <div class="panel panel-default post_data post_data_<?php echo $post->ID; ?>">
 	<div class="panel-heading">
-		<h3><small>Title: </small><?php the_title(); ?> 
+		<h3><small><?php _e('Title', $this->plugin_slug ); ?>: </small><?php the_title(); ?> 
 			<small><a href="<?php the_permalink(); ?>" target="new"><span class="label label-info"><?php _e('View', $this->plugin_slug ); ?> <span class="glyphicon glyphicon-new-window"></span></span></a></small> 
 			<small><a href="<?php echo admin_url('post.php?post=' . $post->ID . '&action=edit'); ?>" target="new"><span class="label label-success"><?php _e('Edit', $this->plugin_slug ); ?> <span class="glyphicon glyphicon-new-window"></span></span></a></small>
 		</h3>
 	</div>
 	<div class="panel-body">
+		<?php if(!get_option('hippo_help_off')): ?>
+			<?php if ($title_class !== '' && $descr_class !== '') : ?>
+
+			<div class="alert alert-info">
+				<a href="#" class="close" data-dismiss="alert">&times;</a>
+				<strong><?php _e('Why are these fields RED', $this->plugin_slug ); ?>?</strong>
+				<span><?php _e('If there are no values assigned for the Meta Title or Meta Description, Little Hippo fills them in for you using the values for the Post Title and the first 155 characters of the Post Content. We recommend you review them, make any necessary changes and then click "Save Meta" to update these fields', $this->plugin_slug ); ?>. (<em><?php _e('You can turn off these Tips in Settings > General > Turn off Assist and Tip notifications', $this->plugin_slug ); ?></em>)</span>
+			</div>
+			<?php endif; ?>
+		<?php endif; ?>
+
 		<form class="form-inline row" role="form" action="" id="tip_post_meta-<?php echo $post->ID; ?>">
 			<div class="form-group form-group-sm col-xs-12">
 				<label><?php _e('Meta Title', $this->plugin_slug ); ?>: </label>

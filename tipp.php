@@ -15,7 +15,7 @@
  * Plugin Name:       Little Hippo (Makes your BIG job small)
  * Plugin URI:        http://http://www.littlehippo.co/
  * Description:       Manage meta tags for images, pages and posts in bulk via the WordPress dashboard
- * Version:           0.4.5
+ * Version:           1.0.0
  * Author:            DoSA (Do Something Awesome)
  * Author URI:        http://www.dsa-global.com/
  * Text Domain:       tipp
@@ -46,7 +46,8 @@ add_action( 'plugins_loaded', array( 'Tipp', 'get_instance' ) );
 
 if ( is_admin() ) {
 
-	include( plugin_dir_path( __FILE__ ) . 'admin/includes/utility.php' );
+	// include( plugin_dir_path( __FILE__ ) . 'admin/includes/utility.php' );
+	include( plugin_dir_path( __FILE__ ) . 'admin/includes/dashboard.php' );
 
 	require_once( plugin_dir_path( __FILE__ ) . 'admin/class-tipp-admin.php' );
 	add_action( 'plugins_loaded', array( 'Tipp_Admin', 'get_instance' ) );
@@ -54,4 +55,6 @@ if ( is_admin() ) {
 	if( get_option('seo_plugin') === 'HIPPO' ){
 		require_once( plugin_dir_path( __FILE__ ) . 'admin/includes/metabox/hippo-metaboxes.php' );
 	}
+
+	$dash = HippoDash::get_instance();
 }

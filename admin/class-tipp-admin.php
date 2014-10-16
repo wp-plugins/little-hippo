@@ -48,20 +48,21 @@ class Tipp_Admin {
 		$plugin = Tipp::get_instance();
 		$this->plugin_slug = $plugin->get_plugin_slug();
 
+		$dash = HippoDash::get_instance();
+
+		add_action( 'init', array($this, 'hippo_init') );
+
 		// Load admin style sheet and JavaScript.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		// Add the options page, options defaults and menu item.
 		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
+		add_action( 'admin_footer', array( $this, 'add_charcount' ) );
 
 		// Add an action link pointing to the options page.
 		$plugin_basename = plugin_basename( plugin_dir_path( realpath( dirname( __FILE__ ) ) ) . $this->plugin_slug . '.php' );
 		add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
-
-		/*
-		 * Define custom functionality.
-		 */
 
 		add_action( 'contextual_help', array( $this, 'scg_screen_help' ), 10, 3 );
 		add_action( 'wp_ajax_tipp_to_file', array( $this, 'tipp_title_to_file') );
@@ -71,6 +72,8 @@ class Tipp_Admin {
 		add_action( 'wp_ajax_tipp_update_tags', array( $this, 'tipp_update_tags') );
 		add_action( 'wp_ajax_tipp_save_all', array( $this, 'tipp_update_all') );
 		add_action( 'wp_ajax_tipp_empty_trash', array( $this, 'hippo_empty_trash' ) );
+
+		add_action( 'save_post', array( $dash, 'hippo_add_metadata') );
 	}
 
 	/**
@@ -89,6 +92,23 @@ class Tipp_Admin {
 		return self::$instance;
 	}
 
+	public static function hippo_init(){
+		define('AUTOSAVE_INTERVAL', get_option('hippo_autosave_interval', 300));
+		if (get_option('hippo_revisions') && get_option('hippo_revisions') > 0){
+			define('WP_POST_REVISIONS', get_option('hippo_revisions', 5));
+		} else {
+			define('WP_POST_REVISIONS', false);
+		}
+	}
+
+	public function hippo_revisions( $num, $post ){
+		if (get_option('hippo_revisions') && get_option('hippo_revisions') > 0){
+			return (int)get_option('hippo_revisions');
+		} else {
+			return 0;
+		}
+	}
+
 	/**
 	 * Register and enqueue admin-specific style sheet.
 	 *
@@ -105,8 +125,8 @@ class Tipp_Admin {
 		if ( in_array( $screen->id, $this->plugin_screen_hook_suffix ) ) {
 			wp_enqueue_style( $this->plugin_slug.'-bootstrap', plugins_url( 'assets/css/bootstrap.min.css', __FILE__ ), array(), Tipp::VERSION );
 			wp_enqueue_style( $this->plugin_slug.'-tooltipcss', plugins_url('assets/css/tooltipster.css', __FILE__ ), array(), Tipp::VERSION );
-			wp_enqueue_style( $this->plugin_slug .'-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), Tipp::VERSION );
 		}
+		wp_enqueue_style( $this->plugin_slug .'-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), Tipp::VERSION );
 	}
 
 	/**
@@ -124,11 +144,42 @@ class Tipp_Admin {
 		$screen = get_current_screen();
 		if ( in_array( $screen->id, $this->plugin_screen_hook_suffix ) ) {
 			wp_enqueue_script( $this->plugin_slug.'-bootstrapjs', plugins_url('assets/js/bootstrap.min.js', __FILE__ ), array('jquery'), Tipp::VERSION );
-			wp_enqueue_script( $this->plugin_slug.'-textcounter', plugins_url('assets/js/jquery.charactercounter.js', __FILE__ ), array('jquery'), Tipp::VERSION );
 			wp_enqueue_script( $this->plugin_slug.'-tooltip', plugins_url('assets/js/jquery.tooltipster.js', __FILE__ ), array('jquery'), Tipp::VERSION );
 			wp_enqueue_script( $this->plugin_slug.'-admin-script', plugins_url('assets/js/admin.js', __FILE__ ), array('jquery','wp-ajax-response'), Tipp::VERSION );
 			wp_localize_script( $this->plugin_slug.'-admin-script', 'TippSettings', $this->localize_vars() );
 		}
+		wp_enqueue_script( $this->plugin_slug.'-textcounter', plugins_url('assets/js/jquery.charactercounter.js', __FILE__ ), array('jquery'), Tipp::VERSION );
+	}
+
+	public function add_charcount(){
+		echo '
+		<script type="text/javascript">
+		jQuery(document).ready(function(){
+			jQuery("#_hippo_seo_title").characterCounter({
+				counterCssClass: "seo-meta-title",
+				limit: 55
+			});
+			jQuery("#_hippo_seo_metadesc").characterCounter({
+				counterCssClass: "seo-meta-desc",
+				limit: 155
+			});
+		});
+		</script>
+		<style>
+table.cmb_metabox input[type=text], 
+table.cmb_metabox textarea {
+	width: 95%;
+}
+.form-table td span.seo-meta-desc, 
+.form-table td span.seo-meta-title {
+	vertical-align: top;
+	font-size: 10px;
+	padding: 6px 0 0 6px;
+	font-weight: 400;
+	line-height: 2.6;
+	color: #555;
+}
+		</style>';
 	}
 
 	/**
@@ -138,6 +189,10 @@ class Tipp_Admin {
 	 */
 	public function add_plugin_admin_menu() {
 
+		global $dash;
+
+		$issues_count = '<span class="hippo-issues"><span class="issues-count">' . $dash->get_issues_count() . '</span></span>';
+
 		$this->plugin_screen_hook_suffix[] = add_menu_page(
 			__( 'Little Hippo', $this->plugin_slug ),
 			__( 'Little Hippo', $this->plugin_slug ),
@@ -146,6 +201,14 @@ class Tipp_Admin {
 			array( $this, 'display_plugin_admin_page' ),
 			plugins_url('assets/images/littleHIPPO-Logo-red-20x18.png', __FILE__ ),
 			76
+		);
+		$this->plugin_screen_hook_suffix[] = add_submenu_page(
+			$this->plugin_slug,
+			__( 'Fix Issues', $this->plugin_slug ),
+			__( 'Issues', $this->plugin_slug ) . ' ' . $issues_count,
+			'manage_options',
+			'hippo_issues',
+			array( $this, 'display_plugin_issues_page' )
 		);
 		$this->plugin_screen_hook_suffix[] = add_submenu_page(
 			$this->plugin_slug,
@@ -208,7 +271,10 @@ class Tipp_Admin {
 		register_setting( 'hippo_settings', 'img_min_alt' );
 
 		register_setting( 'hippo_settings', 'hippo_outbound_nf' );
+		register_setting( 'hippo_settings', 'hippo_autosave_interval' );
 		register_setting( 'hippo_settings', 'hippo_empty_trash' );
+		register_setting( 'hippo_settings', 'hippo_help_off' );
+		register_setting( 'hippo_settings', 'hippo_head_cleanup' );
 		register_setting( 'hippo_settings', 'hippo_ga_id' );
 		register_setting( 'hippo_settings', 'hippo_ga_te_to' );
 		register_setting( 'hippo_settings', 'hippo_ga_off' );
@@ -264,61 +330,56 @@ class Tipp_Admin {
 		update_option( 'char_min_alt', 100 );
 
 		update_option( 'img_limit_title', 65 );
-		update_option( 'img_limit_alt', 255 );
+		update_option( 'img_limit_alt', 125 );
 		update_option( 'img_min_title', 30 );
-		update_option( 'img_min_alt', 152 );
+		update_option( 'img_min_alt', 0 );
 	}
 
-	/**
-	 * Render the settings page for this plugin.
-	 *
-	 * @since    1.0.0
-	 */
 	public function display_plugin_admin_page() {
+		global $dash;
+
+		$hippo_check = $dash->check_validation_init();
+
+		if($hippo_check === false):
+			echo '<div class="row">';
+			echo '<div class="col-sm-10 col-sm-offset-1">';
+			echo '<div class="alert alert-info">';
+			echo '<a href="#" class="close" data-dismiss="alert">&times;</a>';
+			echo '<p>' . __('Little Hippo needs to initialize some settings. This only needs to be done once.', $this->plugin_slug) . '</p>';
+			echo '<p>&nbsp;</p>';
+			echo '<p><span>' . __('Initializing', $this->plugin_slug) . ' ...</span> ';
+			
+			$dash->hippo_firstpass();
+
+			echo '<span>' . __('Done.', $this->plugin_slug) . '</span></p>';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>';
+		endif;
+
 		include_once( 'views/admin.php' );
 	}
 
-	/**
-	 * Render the Tag Images page for this plugin.
-	 *
-	 * @since    1.0.0
-	 */
-	public function display_plugin_images_page() {
-		include_once( 'views/tag-images.php' );
+	public function display_plugin_issues_page() {
+		include_once( 'views/hippo-issues.php' );
 	}
 
-	/**
-	 * Render the Tag Pages page for this plugin.
-	 *
-	 * @since    1.0.0
-	 */
 	public function display_plugin_pages_page() {
 		include_once( 'views/tag-pages.php' );
 	}
 
-	/**
-	 * Render the Tag Posts page for this plugin.
-	 *
-	 * @since    1.0.0
-	 */
 	public function display_plugin_posts_page() {
 		include_once( 'views/tag-posts.php' );
 	}
 
-	/**
-	 * Render the Custom Posts page for this plugin.
-	 *
-	 * @since    1.0.0
-	 */
 	public function display_plugin_custom_page() {
 		include_once( 'views/tag-custom.php' );
 	}
 
-	/**
-	 * Render the Settings page for this plugin.
-	 *
-	 * @since    1.0.0
-	 */
+	public function display_plugin_images_page() {
+		include_once( 'views/tag-images.php' );
+	}
+
 	public function display_plugin_settings_page() {
 		include_once( 'views/tipp-settings.php' );
 	}
@@ -572,6 +633,7 @@ class Tipp_Admin {
 	}
 
 	public function tipp_update_meta() {
+		global $dash;
 
 		if( !isset( $_POST['_tipp_nonce'] ) || !wp_verify_nonce($_POST['_tipp_nonce'], 'tipp-save_meta') ) die('Permissions check failed');
 
@@ -580,6 +642,7 @@ class Tipp_Admin {
 			update_post_meta($_POST['objid'], $seodata['meta_title_field'],$_POST['meta_title_value']);
 			update_post_meta($_POST['objid'], $seodata['meta_descr_field'],$_POST['meta_descr_value']);
 			update_post_meta($_POST['objid'], $seodata['meta_kword_field'],$_POST['meta_kword_value']);
+			$dash->hippo_add_metadata($_POST['objid']);
 		}
 
 		echo $_POST['objid'];
@@ -588,6 +651,7 @@ class Tipp_Admin {
 	}
 
 	public function tipp_update_all() {
+		global $dash;
 
 		if( !isset( $_POST['_tipp_nonce'] ) || !wp_verify_nonce($_POST['_tipp_nonce'], 'tipp-save_all') ) die('Permissions check failed');
 
@@ -596,6 +660,7 @@ class Tipp_Admin {
 			update_post_meta($_POST['objid'], $seodata['meta_title_field'],$_POST['meta_title_value']);
 			update_post_meta($_POST['objid'], $seodata['meta_descr_field'],$_POST['meta_descr_value']);
 			update_post_meta($_POST['objid'], $seodata['meta_kword_field'],$_POST['meta_kword_value']);
+			$dash->hippo_add_metadata($_POST['objid']);
 		}
 
 		$media_list = array();
@@ -610,6 +675,7 @@ class Tipp_Admin {
 	}
 
 	public function tipp_update_tags() {
+		global $dash;
 
 		if( !isset( $_POST['_tipp_nonce'] ) || !wp_verify_nonce($_POST['_tipp_nonce'], 'tipp-upd_tags') ) die('Permissions check failed');
 
@@ -632,6 +698,7 @@ class Tipp_Admin {
 		if ($update_result) {
 			$alt_result = update_post_meta( $_POST['media'], '_wp_attachment_image_alt', $_POST['newalt'] );
 			$alt_result = ($alt_result) ? $update_result : 'Error saving Alt Tag';
+			$dash->hippo_add_image_metadata($_POST['media']);
 		}
 
 		echo $update_result;
@@ -678,11 +745,20 @@ class Tipp_Admin {
 		$help_content = $variables . $hooks;
  
 		// Add help panel
-		$screen->add_help_tab( array(
-			'id'      => 'scg-screen-help',
-			'title'   => 'Screen Information',
-			'content' => $help_content,
-		));
+		$screen->add_help_tab(
+			array(
+				'id'      => 'hipp-screen-help',
+				'title'   => 'About Little Hippo',
+				'content' => 'Little Hippo is a multifunction plugin for agencies and site owners that speeds up the process of onsite optimisation.',
+			)
+		);
+		$screen->add_help_tab( 
+			array(
+				'id'      => 'hippo-screen-info',
+				'title'   => 'Screen Information',
+				'content' => $help_content,
+			)
+		);
  
 		return $contextual_help;
 	}
@@ -719,6 +795,47 @@ class Tipp_Admin {
 				$pagination .= '<li><a href="" class="disabled">&hellip;</a></li>';
 			endif;
 			$pagination .= '<li><a href="' . admin_url('admin.php?page=' . $page_name . '&pagenum=' . $pages) . '">&raquo;</a></li>';
+			$pagination .= '</ul>';
+			$pagination .= '<div class="clearfix"></div>';
+		else:
+			$pagination = '';
+		endif;
+
+		return $pagination;
+	}
+
+	public function issues_pagination($pages, $page_name, $cp = 1, $type = NULL, $spread = 3){
+		// Setup and Display Pagination
+		$pagin = array();
+		$ptlink = (!is_null($type)) ? '&type='.$type: '&type=title_length';
+		if ($pages > 10):
+			for( $i = 1; $i <= $pages; $i++ ) {
+				if ( ($i > $cp - $spread) && ($i < $cp + $spread) ) { 
+					$url = admin_url('admin.php?page=' . $page_name . '&pagenum=' . $i . $ptlink);
+					$active = ($cp == $i) ? ' class="active"' : '';
+					$link = '<li' . $active . '><a href="' . $url . '">' . $i . '</a></li>';
+					$pagin[] = $link;
+				}
+			}
+		else:
+			for( $i = 1; $i <= $pages; $i++ ) {
+				$url = admin_url('admin.php?page=' . $page_name . '&pagenum=' . $i . $ptlink);
+				$active = ($cp == $i) ? ' class="active"' : '';
+				$link = '<li' . $active . '><a href="' . $url . '">' . $i . '</a></li>';
+				$pagin[] = $link;
+			}
+		endif;
+		if ($pages != 1):
+			$pagination = '<ul class="pagination">';
+			$pagination .= '<li><a href="' . admin_url('admin.php?page=' . $page_name . $ptlink) . '">&laquo;</a></li>';
+			if ($pages > 10 && $cp > 4): 
+				$pagination .= '<li><a href="" class="disabled">&hellip;</a></li>';
+			endif;
+			$pagination .= implode( '', $pagin );
+			if ($pages > 10 && $cp < ($pages - $spread)): 
+				$pagination .= '<li><a href="" class="disabled">&hellip;</a></li>';
+			endif;
+			$pagination .= '<li><a href="' . admin_url('admin.php?page=' . $page_name . '&pagenum=' . $pages . $ptlink) . '">&raquo;</a></li>';
 			$pagination .= '</ul>';
 			$pagination .= '<div class="clearfix"></div>';
 		else:
