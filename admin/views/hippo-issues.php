@@ -49,7 +49,8 @@ $is_image = (substr($it, 0, 3) === 'img') ? true: false;
 		<div class="tab-pane active" id="<?php echo $it; ?>">
 <?php
 if(!$is_image):
-	$total_posts = $dash->meta_issues()[$it];
+	$tp = $dash->meta_issues();
+	$total_posts = $tp[$it];
 	$posts_per_page = 10;
 	$current_page = isset( $_GET['pagenum'] ) ? intval($_GET['pagenum']) : 1;
 	$pages = ceil($total_posts/$posts_per_page);
@@ -101,7 +102,8 @@ if(!$is_image):
 <?php
 	endif; // have $post_types
 else:
-	$total_posts = $dash->image_issues()[$it];
+	$tp = $dash->meta_issues();
+	$total_posts = $tp[$it];
 	$posts_per_page = 10;
 	$current_page = isset( $_GET['pagenum'] ) ? intval($_GET['pagenum']) : 1;
 	$pages = ceil($total_posts/$posts_per_page);
