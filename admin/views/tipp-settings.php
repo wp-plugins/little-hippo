@@ -285,7 +285,7 @@ $to_trash_url = esc_url(wp_nonce_url( admin_url('admin-ajax.php?action=tipp_empt
 	<div class="col-sm-4">
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<div class="panel-title"><?php _e('About Little Hippo', $this->plugin_slug); ?> <small>ver. <?php echo constant("TIPP::VERSION"); ?> Beta</small></div>
+				<div class="panel-title"><?php _e('About Little Hippo', $this->plugin_slug); ?> <small>ver. <?php echo constant("TIPP::VERSION"); ?></small></div>
 			</div>
 			<div class="panel-body">
 				<p><a href="http://littlehippo.co">Little Hippo SEO Tools</a> by <a href="http://dosa.io">DoSA</a>, <a href="http://www.dsa-global.com">DSA-Global</a></p>

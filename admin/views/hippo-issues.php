@@ -102,7 +102,7 @@ if(!$is_image):
 <?php
 	endif; // have $post_types
 else:
-	$tp = $dash->meta_issues();
+	$tp = $dash->image_issues();
 	$total_posts = $tp[$it];
 	$posts_per_page = 10;
 	$current_page = isset( $_GET['pagenum'] ) ? intval($_GET['pagenum']) : 1;

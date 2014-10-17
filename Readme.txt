@@ -4,7 +4,7 @@ Donate link: http://www.littlehippo.co/donate/
 Tags: little hippo, search engine optimization, seo, seo tools, image tagger, bulk editor
 Requires at least: 3.5.1
 Tested up to: 4.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 
 Little Hippo is a multifunction plugin for agencies and site owners that speeds up the process
@@ -119,14 +119,17 @@ But after many years, we're all still waiting.
 
 == Changelog ==
 
+= 1.0.1 = 
+* Fixed pagination for Image Issues
+
 = 1.0.0 Release =
-Added Multi-language capabilities - English, French, Spanish and German
-Added clean-up features in WordPress header
-Added dedicated Issues page to handle only content with issues in the bulk editor
-Added some tool tips and help dialogues
-Added character counter to Little Hippo SEO fields in Post/Page editor areas
-Enhanced tracking of issues in the core
-Various core updates to prepare for future tools releases
+* Added Multi-language capabilities - English, French, Spanish and German
+* Added clean-up features in WordPress header
+* Added dedicated Issues page to handle only content with issues in the bulk editor
+* Added some tool tips and help dialogues
+* Added character counter to Little Hippo SEO fields in Post/Page editor areas
+* Enhanced tracking of issues in the core
+* Various core updates to prepare for future tools releases
 
 = 0.4.5 Beta =
 * Minor fixes

@@ -21,7 +21,7 @@ class Tipp {
 	 * @since   0.0.0
 	 * @var     string
 	 */
-	const VERSION = '1.0.0';
+	const VERSION = '1.0.1';
 
 	/**
 	 * Unique identifier for your plugin.
