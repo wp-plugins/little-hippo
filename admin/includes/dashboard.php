@@ -133,6 +133,9 @@ class HippoDash {
 			'post_type'		=> $avail_posttypes,
 			'post_status'	=> 'any',
 			'numberposts'	=> -1,
+			'no_found_rows' => true,
+			'cache_results' => false,
+			'fields'		=> 'ids',
 		);
 		$hippo_posts = get_posts($hippo_args);
 
@@ -143,6 +146,9 @@ class HippoDash {
 		$hippo_args = array(
 			'post_type'		=> 'attachment',
 			'numberposts'	=> -1,
+			'no_found_rows' => true,
+			'cache_results' => false,
+			'fields'		=> 'ids',
 		);
 		$hippo_posts = get_posts($hippo_args);
 
@@ -190,6 +196,8 @@ class HippoDash {
 			'post_type'		=> $this->avail_posttypes( true ),
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'publish',
+			'no_found_rows' => true,
+			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_metatitle_missing',
@@ -201,6 +209,8 @@ class HippoDash {
 			'post_type'		=> $this->avail_posttypes( true ),
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'publish',
+			'no_found_rows' => true,
+			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_metatitle_length',
@@ -212,6 +222,8 @@ class HippoDash {
 			'post_type'		=> $this->avail_posttypes( true ),
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'publish',
+			'no_found_rows' => true,
+			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_metadesc_missing',
@@ -223,6 +235,8 @@ class HippoDash {
 			'post_type'		=> $this->avail_posttypes( true ),
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'publish',
+			'no_found_rows' => true,
+			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_metadesc_length',
@@ -276,6 +290,8 @@ class HippoDash {
 			'post_type'		=> 'attachment',
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'inherit',
+			'no_found_rows' => true,
+			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_imgtitle_missing',
@@ -287,6 +303,8 @@ class HippoDash {
 			'post_type'		=> 'attachment',
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'inherit',
+			'no_found_rows' => true,
+			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_imgtitle_length',
@@ -298,6 +316,8 @@ class HippoDash {
 			'post_type'		=> 'attachment',
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'inherit',
+			'no_found_rows' => true,
+			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_imgalt_missing',
@@ -309,6 +329,8 @@ class HippoDash {
 			'post_type'		=> 'attachment',
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'inherit',
+			'no_found_rows' => true,
+			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_imgalt_length',

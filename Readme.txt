@@ -4,7 +4,7 @@ Donate link: http://www.littlehippo.co/donate/
 Tags: little hippo, search engine optimization, seo, seo tools, image tagger, bulk editor
 Requires at least: 3.5.1
 Tested up to: 4.0
-Stable tag: 1.0.1
+Stable tag: 1.0.5
 License: GPLv2 or later
 
 Little Hippo is a multifunction plugin for agencies and site owners that speeds up the process
@@ -112,10 +112,7 @@ Yes of course, please contact us and we can discuss how we can help!
 
 == Screenshots ==
 
-Nothing here yet.
-
-I would really like WordPress to document how this should be done.
-But after many years, we're all still waiting.
+All screenshots can be viewed on the [Little Hippo website](http://littlehippo.co/screenshots/ "Little Hippo Screenshots").
 
 == Changelog ==
 

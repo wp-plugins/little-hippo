@@ -21,7 +21,7 @@ class Tipp {
 	 * @since   0.0.0
 	 * @var     string
 	 */
-	const VERSION = '1.0.1';
+	const VERSION = '1.0.5';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -218,7 +218,30 @@ class Tipp {
 	 * @since    1.0.0
 	 */
 	private static function single_activate() {
-		// @TODO: Define activation functionality here
+
+/*		echo '<p>Initializing Little Hippo (this may take some time on large sites).</p>'
+		$avail_posttypes = $this->avail_posttypes( true );
+		$hippo_args = array(
+			'post_type'		=> $avail_posttypes,
+			'post_status'	=> 'any',
+			'numberposts'	=> -1,
+		);
+		$hippo_posts = get_posts($hippo_args);
+
+		foreach ($hippo_posts as $post) {
+			$this->hippo_add_metadata( $post->ID );
+		}
+
+		$hippo_args = array(
+			'post_type'		=> 'attachment',
+			'numberposts'	=> -1,
+		);
+		$hippo_posts = get_posts($hippo_args);
+
+		foreach ($hippo_posts as $post) {
+			$this->hippo_add_image_metadata( $post->ID );
+		}
+		echo '<p>Done.</p>';*/
 	}
 
 	/**
