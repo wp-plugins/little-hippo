@@ -74,10 +74,12 @@ class HippoDash {
 
 			foreach ($test_posts as $post) {
 				$fields_result = get_post_custom_keys($post->ID);
-				if( in_array('_hippo_metatitle_missing', $fields_result, true) ){
-					$results[] = true;
-				} else {
-					$results[] = false;
+				if(is_array($fields_result)){
+					if( in_array('_hippo_metatitle_missing', $fields_result, true) ){
+						$results[] = true;
+					} else {
+						$results[] = false;
+					}
 				}
 			}
 
