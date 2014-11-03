@@ -21,7 +21,7 @@ class Tipp {
 	 * @since   0.0.0
 	 * @var     string
 	 */
-	const VERSION = '1.0.5';
+	const VERSION = '1.1.0';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -74,7 +74,7 @@ class Tipp {
 			add_action( 'hippo_wp_head', array( $this, 'hippo_ga' ), 10 );
 			add_action( 'hippo_wp_head', array( $this, 'hippo_facebook' ), 20 );
 
-			add_filter( 'wp_title', array( $this, 'show_meta_title' ), 10, 2 );
+			add_filter( 'wp_title', array( $this, 'show_meta_title' ), 90, 2 );
 
 		endif;
 
@@ -218,30 +218,7 @@ class Tipp {
 	 * @since    1.0.0
 	 */
 	private static function single_activate() {
-
-/*		echo '<p>Initializing Little Hippo (this may take some time on large sites).</p>'
-		$avail_posttypes = $this->avail_posttypes( true );
-		$hippo_args = array(
-			'post_type'		=> $avail_posttypes,
-			'post_status'	=> 'any',
-			'numberposts'	=> -1,
-		);
-		$hippo_posts = get_posts($hippo_args);
-
-		foreach ($hippo_posts as $post) {
-			$this->hippo_add_metadata( $post->ID );
-		}
-
-		$hippo_args = array(
-			'post_type'		=> 'attachment',
-			'numberposts'	=> -1,
-		);
-		$hippo_posts = get_posts($hippo_args);
-
-		foreach ($hippo_posts as $post) {
-			$this->hippo_add_image_metadata( $post->ID );
-		}
-		echo '<p>Done.</p>';*/
+		// @TODO: Define activation functionality here
 	}
 
 	/**
@@ -457,6 +434,7 @@ class Tipp {
 				$title = $title_format;
 			} elseif ( is_home() ) {
 				$title_format = get_option('def_arc_title');
+
 				if ( strpos( $title_format, '%site_title%' ) !== false ) $title_format = str_replace( '%site_title%', $site_title, $title_format );
 				if ( strpos( $title_format, '%site_desc%' ) !== false ) $title_format = str_replace( '%site_desc%', $site_descr, $title_format );
 
@@ -531,7 +509,20 @@ class Tipp {
 	public function hippo_facebook(){
 		global $post, $wp_query;
 
-		$page_title = get_post_meta( $post->ID, get_option('meta_title_field'), true );
+		$front_test = get_option('show_on_front');
+
+		if($front_test === 'posts'){
+			$title_format = get_option( 'def_home_title' );
+			$seo_title = get_post_meta( $postid, get_option('meta_title_field'), true );
+
+			if ( strpos( $title_format, '%site_title%' ) !== false ) $title_format = str_replace( '%site_title%', $site_title, $title_format );
+			if ( strpos( $title_format, '%site_desc%' ) !== false ) $title_format = str_replace( '%site_desc%', $site_descr, $title_format );
+			if ( strpos( $title_format, '%seo_title%' ) !== false ) $title_format = str_replace( '%seo_title%', $seo_title, $title_format );
+
+			$page_title = $title_format;
+		} else {
+			$page_title = get_post_meta( $post->ID, get_option('meta_title_field'), true );
+		}
 		$site_title = get_bloginfo('name');
 		$site_url   = get_bloginfo('url');
 		$site_desc  = get_post_meta( $post->ID, get_option('meta_descr_field'), true );
@@ -578,7 +569,6 @@ class Tipp {
 	}
 
 	public function restructure_images($attr) {
-		
 
 		$attr['title'] = '';
 		$attr['alt'] = '';

@@ -74,12 +74,10 @@ class HippoDash {
 
 			foreach ($test_posts as $post) {
 				$fields_result = get_post_custom_keys($post->ID);
-				if(is_array($fields_result)){
-					if( in_array('_hippo_metatitle_missing', $fields_result, true) ){
-						$results[] = true;
-					} else {
-						$results[] = false;
-					}
+				if( in_array('_hippo_metatitle_missing', $fields_result, true) ){
+					$results[] = true;
+				} else {
+					$results[] = false;
 				}
 			}
 
@@ -135,32 +133,32 @@ class HippoDash {
 			'post_type'		=> $avail_posttypes,
 			'post_status'	=> 'any',
 			'numberposts'	=> -1,
-			'no_found_rows' => true,
 			'cache_results' => false,
+			'no_found_rows' => true,
 			'fields'		=> 'ids',
 		);
 		$hippo_posts = get_posts($hippo_args);
 
 		foreach ($hippo_posts as $post) {
-			$this->hippo_add_metadata( $post->ID );
+			$this->hippo_add_metadata( $post );
 		}
 
 		$hippo_args = array(
 			'post_type'		=> 'attachment',
 			'numberposts'	=> -1,
-			'no_found_rows' => true,
 			'cache_results' => false,
+			'no_found_rows' => true,
 			'fields'		=> 'ids',
 		);
 		$hippo_posts = get_posts($hippo_args);
 
 		foreach ($hippo_posts as $post) {
-			$this->hippo_add_image_metadata( $post->ID );
+			$this->hippo_add_image_metadata( $post );
 		}
 	}
 
 	public function hippo_add_metadata( $pid ){
-
+		if (!$this->check_validation_init($pid)){
 			if( !update_post_meta( $pid, '_hippo_metatitle_missing', $this->meta_title( $pid ), true ) ){
 				add_post_meta( $pid, '_hippo_metatitle_missing', $this->meta_title( $pid ), true );	
 			}
@@ -173,7 +171,7 @@ class HippoDash {
 			if( !update_post_meta( $pid, '_hippo_metadesc_length', $this->meta_desc( $pid, true ), true ) ){
 				add_post_meta( $pid, '_hippo_metadesc_length', $this->meta_desc( $pid, true ), true );
 			}
-
+		}
 	}
 
 	public function hippo_add_image_metadata( $pid ){
@@ -198,8 +196,6 @@ class HippoDash {
 			'post_type'		=> $this->avail_posttypes( true ),
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'publish',
-			'no_found_rows' => true,
-			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_metatitle_missing',
@@ -211,8 +207,6 @@ class HippoDash {
 			'post_type'		=> $this->avail_posttypes( true ),
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'publish',
-			'no_found_rows' => true,
-			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_metatitle_length',
@@ -224,8 +218,6 @@ class HippoDash {
 			'post_type'		=> $this->avail_posttypes( true ),
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'publish',
-			'no_found_rows' => true,
-			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_metadesc_missing',
@@ -237,8 +229,6 @@ class HippoDash {
 			'post_type'		=> $this->avail_posttypes( true ),
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'publish',
-			'no_found_rows' => true,
-			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_metadesc_length',
@@ -292,8 +282,6 @@ class HippoDash {
 			'post_type'		=> 'attachment',
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'inherit',
-			'no_found_rows' => true,
-			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_imgtitle_missing',
@@ -305,8 +293,6 @@ class HippoDash {
 			'post_type'		=> 'attachment',
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'inherit',
-			'no_found_rows' => true,
-			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_imgtitle_length',
@@ -318,8 +304,6 @@ class HippoDash {
 			'post_type'		=> 'attachment',
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'inherit',
-			'no_found_rows' => true,
-			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_imgalt_missing',
@@ -331,8 +315,6 @@ class HippoDash {
 			'post_type'		=> 'attachment',
 			'posts_per_page'=> $ppp,
 			'post_status'	=> 'inherit',
-			'no_found_rows' => true,
-			'cache_results' => false,
 			'meta_query'	=> array(
 				array(
 					'key'	=> '_hippo_imgalt_length',
@@ -463,5 +445,43 @@ class HippoDash {
 		}
 
 		return;
+	}
+
+	function hippo_remove_stats(){
+		// if( !isset( $_POST['_tipp_nonce'] ) || !wp_verify_nonce($_POST['_tipp_nonce'], 'hippo-reset') ) die('Permissions check failed');
+
+		$avail_posttypes = $this->avail_posttypes( true );
+		$hippo_args = array(
+			'post_type'		=> $avail_posttypes,
+			'post_status'	=> 'any',
+			'numberposts'	=> -1,
+			'cache_results' => false,
+			'no_found_rows' => true,
+			'fields'		=> 'ids',
+		);
+		$hippo_posts = get_posts($hippo_args);
+
+		foreach ($hippo_posts as $post) {
+			delete_post_meta($post, '_hippo_metatitle_missing');
+			delete_post_meta($post, '_hippo_metadesc_missing');
+			delete_post_meta($post, '_hippo_metatitle_length');
+			delete_post_meta($post, '_hippo_metadesc_length');
+		}
+
+		$hippo_args = array(
+			'post_type'		=> 'attachment',
+			'numberposts'	=> -1,
+			'cache_results' => false,
+			'no_found_rows' => true,
+			'fields'		=> 'ids',
+		);
+		$hippo_posts = get_posts($hippo_args);
+
+		foreach ($hippo_posts as $post) {
+			delete_post_meta($post, '_hippo_imgtitle_missing');
+			delete_post_meta($post, '_hippo_imgalt_missing');
+			delete_post_meta($post, '_hippo_imgtitle_length');
+			delete_post_meta($post, '_hippo_imgalt_length');
+		}
 	}
 }

@@ -16,7 +16,7 @@
 <?php
 $cpt_args = array(
 	'public' => true,
-	'_builtin' => false,
+	'_builtin' => false
 );
 $tipp_pt = array();
 $tab_active = ' class="active"';
@@ -52,7 +52,6 @@ foreach ( $post_types as $post_type ) {
 		'posts_per_page' 	=> $ppp,
 		'post_status'		=> 'publish',
 		'offset'			=> $ppp * ($cp - 1),
-		'cache_results' => false,
 	);
 	$posts_tipp = new WP_Query( $posts_args );
 

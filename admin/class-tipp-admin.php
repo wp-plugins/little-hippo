@@ -48,7 +48,7 @@ class Tipp_Admin {
 		$plugin = Tipp::get_instance();
 		$this->plugin_slug = $plugin->get_plugin_slug();
 
-		$dash = HippoDash::get_instance();
+		// $dash = HippoDash::get_instance();
 
 		add_action( 'init', array($this, 'hippo_init') );
 
@@ -57,6 +57,7 @@ class Tipp_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		// Add the options page, options defaults and menu item.
+		add_action( 'admin_init', array( $this, 'register_hippo_settings' ) );
 		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 		add_action( 'admin_footer', array( $this, 'add_charcount' ) );
 
@@ -250,9 +251,14 @@ table.cmb_metabox textarea {
 			'tipp-settings',
 			array( $this, 'display_plugin_settings_page' )
 		);
-
-		add_action('admin_init', array( $this, 'register_hippo_settings' ) );
-
+		$this->plugin_screen_hook_suffix[] = add_submenu_page(
+			$this->plugin_slug,
+			__( 'Reset Little Hippo', $this->plugin_slug ),
+			__( 'Reset', $this->plugin_slug ),
+			'manage_options',
+			'hippo_reset',
+			array( $this, 'display_plugin_hipporeset_page' )
+		);
 	}
 
 	function register_hippo_settings(){
@@ -345,13 +351,12 @@ table.cmb_metabox textarea {
 			echo '<div class="col-sm-10 col-sm-offset-1">';
 			echo '<div class="alert alert-info">';
 			echo '<a href="#" class="close" data-dismiss="alert">&times;</a>';
-			echo '<p>' . __('Little Hippo needs to initialize some settings. This only needs to be done once.', $this->plugin_slug) . '</p>';
-			echo '<p>&nbsp;</p>';
-			echo '<p><span>' . __('Initializing', $this->plugin_slug) . ' ...</span> ';
+			echo '<p>' . __('Little Hippo has scanned your content for SEO issues.', $this->plugin_slug) . '</p>';
+			echo '<p>' . __('If you stopped this process without knowing, you can rest the data and scan again from the menu.', $this->plugin_slug) . '</p>';
 			
 			$dash->hippo_firstpass();
 
-			echo '<span>' . __('Done.', $this->plugin_slug) . '</span></p>';
+			echo '<p>' . __('You may wish to refresh this page to display the total issues count correctly.', $this->plugin_slug) . '</p>';
 			echo '</div>';
 			echo '</div>';
 			echo '</div>';
@@ -382,6 +387,10 @@ table.cmb_metabox textarea {
 
 	public function display_plugin_settings_page() {
 		include_once( 'views/tipp-settings.php' );
+	}
+
+	public function display_plugin_hipporeset_page() {
+		include_once( 'views/hippo_reset.php' );
 	}
 
 	public function tipp_get_cpt ($return = 'objects'){
@@ -436,103 +445,6 @@ table.cmb_metabox textarea {
 	}
 
 	/**
-	 * Get all of the Meta Titles and return as array
-	 *
-	 * @since    1.0.0
-	 */
-	public function tipp_get_page_titles(){
-
-		$pagetypes = $this->tipp_get_content_types();
-
-		$status_array = array();
-
-		foreach ($pagetypes as $pagetype){
-			$tipp_args = array(
-				'post_type' => $pagetype,
-				'posts_per_page' => -1,
-				'post_status' => 'publish',
-				'suppress_filters' => false,
-			);
-			$new_query = get_posts( $tipp_args );
-			$stats = array();
-
-			if ($new_query):
-
-				// $stats['query'] = $new_query;
-				$status['total'] = count($new_query);
-
-				foreach ( $new_query as $post_item ){
-
-					$metatitle = get_post_meta( $post_item->ID, get_option('meta_title_field'), true);
-					$metadescr = get_post_meta( $post_item->ID, get_option('meta_descr_field'), true);
-					$metakword = get_post_meta( $post_item->ID, get_option('meta_kword_field'), true);
-
-					if ( is_string( $metatitle ) && $metatitle !== '' ) {
-						$stats['mthas'] += 1;
-					} else {
-						$stats['mthasnot'] += 1;
-					}
-					if ( is_string( $metadescr ) && $metadescr !== '' ) {
-						$stats['mdhas'] += 1;
-					} else {
-						$stats['mdhasnot'] += 1;
-					}
-					if ( is_string( $metakword ) && $metakword !== '' ) {
-						$stats['mkhas'] += 1;
-					} else {
-						$stats['mkhasnot'] += 1;
-					}
-				}
-				$status['title_good'] = ($stats['mthas'] > 0) ? 100 * ($stats['mthas']/$status['total']): 0;
-				$status['title_warn'] = ($stats['mthasnot'] > 0) ? 100 * ($stats['mthasnot']/$status['total']): 0;
-				$status['descr_good'] = ($stats['mdhas'] > 0) ? 100 * ($stats['mdhas']/$status['total']): 0;
-				$status['descr_warn'] = ($stats['mdhasnot'] > 0) ? 100 * ($stats['mdhasnot']/$status['total']): 0;
-				$status['kword_good'] = ($stats['mkhas'] > 0) ? 100 * ($stats['mkhas']/$status['total']): 0;
-				$status['kword_warn'] = ($stats['mkhasnot'] > 0) ? 100 * ($stats['mkhasnot']/$status['total']): 0;
-
-				$status_array[$pagetype] = $status;
-			else:
-			endif;
-		}
-
-		return $status_array;
-	}
-
-	public function tipp_get_imagestatus(){
-
-		$args = array( 
-			'post_type' => 'attachment', 
-			'posts_per_page' => -1,
-			'post_status' => 'inherit',
-		);
-		$tipp_media = get_posts( $args );
-
-		$image_status['total'] = count($tipp_media);
-
-		foreach ($tipp_media as $imagepost) {
-			$image_title = $imagepost->post_title;
-			$image_alt = get_post_meta( $imagepost->ID, '_wp_attachment_image_alt', true );
-			if( !empty($image_title) ) {
-				$image_title_has += 1;
-			} else {
-				$image_title_hasnot += 1;
-			}
-			if( !empty($image_alt) ) {
-				$image_alt_has += 1;
-			} else {
-				$image_alt_hasnot += 1;
-			}
-		}
-
-		$image_status['title_good'] = ($image_title_has > 0) ? 100 * ($image_title_has/$image_status['total']): 0;
-		$image_status['title_warn'] = ($image_title_hasnot > 0) ? 100 * ($image_title_hasnot/$image_status['total']): 0;
-		$image_status['alt_good'] = ($image_alt_has > 0) ? 100 * ($image_alt_has/$image_status['total']): 0;
-		$image_status['alt_warn'] = ($image_alt_hasnot > 0) ? 100 * ($image_alt_hasnot/$image_status['total']): 0;
-
-		return $image_status;
-	}
-
-	/**
 	 * Add settings action link to the plugins page.
 	 *
 	 * @since    1.0.0
@@ -545,7 +457,6 @@ table.cmb_metabox textarea {
 			),
 			$links
 		);
-
 	}
 
 	public function action_get_media( $post_parent = null ) {
@@ -1051,4 +962,5 @@ table.cmb_metabox textarea {
 			'title' => $attachment->post_title
 		);
 	}
+
 }

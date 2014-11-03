@@ -26,7 +26,6 @@ $posts_args = array(
 	'post_type' 		=> 'page',
 	'posts_per_page' 	=> $ppp,
 	'post_status'		=> 'publish',
-	'cache_results' 	=> false,
 	'offset'			=> $ppp * ($cp - 1),
 );
 $posts_tipp = new WP_Query( $posts_args );
