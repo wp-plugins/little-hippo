@@ -1,0 +1,221 @@
+/* This stylesheet is used to style the admin option form of the plugin. */
+
+/* BootStrap Overrides */
+body {
+	font-family: "Open Sans", sans-serif;
+	font-size:14px;
+	line-height: 1.4em;
+	color:#444;
+}
+.updated.fade { opacity:1; }
+
+/* Clear fix */
+.clear-fix:before,
+.clear-fix:after {
+    content: " ";
+    display: table;
+} 
+.clear-fix:after {
+    clear: both;
+}
+/* IE6/7 support */
+.clear-fix {
+    *zoom: 1;
+}
+
+/* TIPP Styles */
+#adminmenu .hippo-issues,
+#adminmenu .wp-submenu li a .hippo-issues {
+	display: inline-block;
+	background-color: #d54e21;
+	color: #fff;
+	font-size: 9px;
+	line-height: 17px;
+	font-weight: 600;
+	margin: 1px 0 0 2px;
+	vertical-align: top;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	z-index: 26;
+}
+#adminmenu .hippo-issues span,
+#adminmenu .wp-submenu li a .hippo-issues span {
+	display: block;
+	padding: 0 6px;
+}
+
+.wp-admin,
+.tipp_page_tipp-hippo-issues,
+.tipp_page_tipp-tag-pages,
+.tipp_page_tipp-tag-posts,
+.tipp_page_tipp-tag-custom,
+.tipp_page_tipp-tag-images,
+.toplevel_page_tipp { background: transparent; }
+
+.tipp_post_wrapper {
+	overflow: hidden;
+	background: #999;
+	border: 1px solid #777;
+	margin: 10px 0;
+	padding: 10px;
+}
+.tipp_post_wrapper .post_data {
+	overflow: hidden;
+	background-color: #fff;
+	border: 1px solid #777;
+	margin-bottom: 0px;
+	padding: 0px;
+}
+.tipp_post_wrapper .post_data h3 { margin:5px 0; }
+.tipp_post_wrapper .post_data .form-control.full { 
+	width:80%; 
+	margin-bottom:5px;
+}
+.tipp_post_wrapper .post_data label { width:11%; }
+.tipp_post_wrapper .post_data .post-actions {
+	margin-bottom: 8px;
+	text-align: right;
+}
+.tipp_post_wrapper .post_data .post-commands { padding:10px 15px; }
+.tipp_item {
+	overflow:hidden;
+	background-color: #fff;
+	margin: 0px 0;
+	border: 1px solid #777;
+}
+.ajax-loader {
+	float: left;
+	padding: 25px 0;
+}
+.tipp_data {
+	float:left;
+	padding: 5px;
+}
+.tipp_thumb { text-align: center; }
+.tipp_thumb img { margin: 0 auto; }
+.tipp_alt {}
+
+.tipp_alt input {}
+.tipp_cmd {
+	float: right;
+}
+#preview {
+	position:absolute;
+	border:1px solid #ccc;
+	background:#333;
+	padding:5px;
+	display:none;
+	color:#fff;
+}
+.tipp_data .form-group {
+	padding-left: 0;
+	padding-right: 0;
+}
+#al-wrapper { padding: 0; }
+.form-inline .form-control.label { width: 20%; text-align: right; }
+.form-inline .form-control.full { width:100%; }
+.form-inline .input-group.full { width: 91%; margin-top: 5px; }
+.form-inline .input-group.seo-title.full,
+.form-inline .input-group.seo-descr.full { width: 80%; margin-top: 5px; margin-bottom:5px; }
+.form-inline .input-group.half { width: 80%; }
+.form-inline .form-control.half { width:83%; }
+.form-inline .form-control.half.image-title { width:100%; }
+
+.form-group span {
+	display: table-cell;
+	width: 45px;
+	white-space: nowrap;
+	vertical-align: middle;
+	font-size: 10px;
+	border-radius: 4px;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	padding: 6px 12px;
+	font-weight: 400;
+	line-height: 1;
+	color: #555;
+	text-align: center;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	border-left: 0;
+}
+.form-group span.exceeded {
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+.form-group span.alert-warning {
+	color: #8a6d3b;
+	background-color: #fcf8e3;
+	border-color: #faebcc;
+}
+.pagination {
+	margin:0;
+	float:right;
+}
+.progress { margin-bottom: 10px; }
+hr { 
+	border-top: 1px solid #bbb;
+	border-bottom: 1px solid #fff;
+	margin-left: 40px;
+	margin-right: 40px;
+}
+.settings-tracking { overflow:hidden; }
+
+.wp-admin #wpcontent input[type=checkbox] { margin-top: 1px; }
+.nav-tabs {
+	border-bottom: 1px solid #bbb;
+}
+.nav-tabs h4, .issue_data h4 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.nav-tabs>li.active>a {
+	border-color: #bbb;
+	border-bottom-color: transparent;
+}
+.nav-tabs>li>a {
+	background-color: #ddd;
+	border-color: #bbb;
+	border-bottom-color: transparent;
+}
+.nav-tabs>li>a:hover {
+	background-color: #ddd;
+	border-color: #bbb;
+	border-bottom-color: transparent;
+}
+#meta, #images { 
+	background-color: #fff; 
+	padding: 15px;
+	border: 1px solid #bbb;
+	border-top: transparent;
+}
+.issue_data { 
+	min-height: 50px;
+	overflow: hidden;
+	padding-left: 60px;
+	margin-bottom: 20px;
+}
+.issue_ok {
+	background-image: url(../images/checkmark-48x41.png);
+	background-repeat: no-repeat;
+	background-position: 0 0px;
+}
+.issue_error {
+	background-image: url(../images/xmark-48x48.png);
+	background-repeat: no-repeat;
+	background-position: 0 0px;
+}
+.issue_warning {
+	background-image: url(../images/warning-49x46.png);
+	background-repeat: no-repeat;
+	background-position: 0 0px;
+}
+.issue_details {
+	
+}
+input[type=text].alert-danger {
+	color: #a94442;
+	background-color: #f2dede;
+	border: 1px solid #ebccd1;
+}
