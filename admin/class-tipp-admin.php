@@ -48,7 +48,7 @@ class Tipp_Admin {
 		$plugin = Tipp::get_instance();
 		$this->plugin_slug = $plugin->get_plugin_slug();
 
-		// $dash = HippoDash::get_instance();
+		$dash = HippoDash::get_instance();
 
 		add_action( 'init', array($this, 'hippo_init') );
 

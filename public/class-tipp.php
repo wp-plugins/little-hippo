@@ -21,7 +21,7 @@ class Tipp {
 	 * @since   0.0.0
 	 * @var     string
 	 */
-	const VERSION = '1.1.0';
+	const VERSION = '1.1.2';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -510,22 +510,26 @@ class Tipp {
 		global $post, $wp_query;
 
 		$front_test = get_option('show_on_front');
+		$seo_desc = NULL;
 
 		if($front_test === 'posts'){
 			$title_format = get_option( 'def_home_title' );
 			$seo_title = get_post_meta( $postid, get_option('meta_title_field'), true );
+			$seo_desc = get_option( 'def_home_desc' );
 
 			if ( strpos( $title_format, '%site_title%' ) !== false ) $title_format = str_replace( '%site_title%', $site_title, $title_format );
 			if ( strpos( $title_format, '%site_desc%' ) !== false ) $title_format = str_replace( '%site_desc%', $site_descr, $title_format );
 			if ( strpos( $title_format, '%seo_title%' ) !== false ) $title_format = str_replace( '%seo_title%', $seo_title, $title_format );
+			if ( strpos( $seo_desc, '%seo_desc%' ) !== false ) $seo_desc = NULL;
 
 			$page_title = $title_format;
 		} else {
 			$page_title = get_post_meta( $post->ID, get_option('meta_title_field'), true );
+			if ( strpos( $seo_desc, '%seo_desc%' ) !== false ) $seo_desc = str_replace( '%seo_desc%', get_post_meta( $post->ID, get_option('meta_descr_field'), true ), $seo_desc );
 		}
 		$site_title = get_bloginfo('name');
 		$site_url   = get_bloginfo('url');
-		$site_desc  = get_post_meta( $post->ID, get_option('meta_descr_field'), true );
+		$site_desc  = (!is_null($seo_desc)) ? $seo_desc: get_post_meta( $post->ID, get_option('meta_descr_field'), true );
 		$home_image = get_option('fb_og_default_img');
 		$def_locale = get_locale();
 		$alt_locale = get_option('fb_og_alt_locale'); //TODO
