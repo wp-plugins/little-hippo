@@ -21,7 +21,7 @@ class Tipp {
 	 * @since   0.0.0
 	 * @var     string
 	 */
-	const VERSION = '1.1.2';
+	const VERSION = '1.1.3';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -74,7 +74,7 @@ class Tipp {
 			add_action( 'hippo_wp_head', array( $this, 'hippo_ga' ), 10 );
 			add_action( 'hippo_wp_head', array( $this, 'hippo_facebook' ), 20 );
 
-			add_filter( 'wp_title', array( $this, 'show_meta_title' ), 90, 2 );
+			add_filter( 'wp_title', array( $this, 'show_meta_title' ), 90, 1 );
 
 		endif;
 
@@ -348,9 +348,9 @@ class Tipp {
 				if ( is_category() ) {
 					$desc_format = get_option('def_cat_desc');
 					$cat_name = single_cat_title("", false);
-					if (strpos($desc_format, '%site_title%') !== false ) $desc_format = str_replace( '%site_title%', $site_title, $desc_format );
-					if ( strpos($desc_format, '%site_desc%') !== false ) $desc_format = str_replace( '%site_desc%', $site_descr, $desc_format );
-					if ( strpos($desc_format, '%cat_name%') !== false ) $desc_format = str_replace( '%cat_name%', $cat_name, $desc_format );
+					if ( strpos($desc_format, '%site_title%' ) !== false ) $desc_format = str_replace( '%site_title%', $site_title, $desc_format );
+					if ( strpos($desc_format, '%site_desc%' ) !== false ) $desc_format = str_replace( '%site_desc%', $site_descr, $desc_format );
+					if ( strpos($desc_format, '%cat_name%' ) !== false ) $desc_format = str_replace( '%cat_name%', $cat_name, $desc_format );
 
 					$desc = $desc_format;
 				} elseif (is_tag()) {
@@ -396,7 +396,7 @@ class Tipp {
 		}
 	}
 
-	public function show_meta_title( $title, $sep ) {
+	public function show_meta_title( $title ) {
 		global $post, $paged, $wp_query;
 
 		$site_title = get_bloginfo('name');

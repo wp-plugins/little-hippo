@@ -6,7 +6,7 @@
  * This also allows you to edit meta tags for posts and pages based on the Title.
  *
  * @package   tipp
- * @author    Eric Buckley <eric.dosa.io>
+ * @author    Eric Buckley <eric@dosa.io>
  * @license   GPL-2.0+
  * @link      http://http://www.littlehippo.co/
  * @copyright 2014 DSA Co. Ltd. & Eric Buckley
@@ -15,7 +15,7 @@
  * Plugin Name:       Little Hippo (Makes your BIG job small)
  * Plugin URI:        http://http://www.littlehippo.co/
  * Description:       Manage meta tags for images, pages and posts in bulk via the WordPress dashboard
- * Version:           1.1.2
+ * Version:           1.1.3
  * Author:            DoSA (Do Something Awesome)
  * Author URI:        http://www.dsa-global.com/
  * Text Domain:       tipp

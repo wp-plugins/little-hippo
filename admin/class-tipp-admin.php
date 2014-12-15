@@ -337,7 +337,7 @@ table.cmb_metabox textarea {
 
 		update_option( 'img_limit_title', 65 );
 		update_option( 'img_limit_alt', 125 );
-		update_option( 'img_min_title', 30 );
+		update_option( 'img_min_title', 0 );
 		update_option( 'img_min_alt', 0 );
 	}
 

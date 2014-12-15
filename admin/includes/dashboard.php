@@ -109,7 +109,7 @@ class HippoDash {
 		$img_issues = $this->image_issues();
 		$totals = $meta_issues['total'] + $img_issues['total'];
 
-		$issues = $this->format_value($totals); // TODO Need to make this VALUE intelligent
+		$issues = $this->format_value($totals);
 
 		return $issues;
 	}

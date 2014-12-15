@@ -43,6 +43,9 @@ $tipp_cpt 	= $this->tipp_get_cpt();
 				<div class="progress-bar progress-bar-info" style="width: <?php echo $tipp_pages['private']; ?>%"><?php _e('Private', $this->plugin_slug); ?></div>
 			</div>
 		</div>
+		<div class="col-xs-1">&nbsp;</div>
+	</div>
+	<div class="row">
 		<div class="col-xs-2 text-right">
 			<p><?php _e('Posts', $this->plugin_slug); ?> (<?php echo $tipp_posts['total']; ?>)</p>
 		</div>
@@ -55,15 +58,16 @@ $tipp_cpt 	= $this->tipp_get_cpt();
 				<div class="progress-bar progress-bar-info" style="width: <?php echo $tipp_posts['private']; ?>%"><?php _e('Private', $this->plugin_slug); ?></div>
 			</div>
 		</div>
+		<div class="col-xs-1">&nbsp;</div>
 	</div>
 
 <?php if ($tipp_cpt): ?>
 
-	<div class="row">
 <?php 
 	foreach ($tipp_cpt as $customtype) {
 	 	$cpt_status = $this->tipp_get_postbreakdown( $customtype->name );
 	 	if ($cpt_status['total'] == 0): ?>
+	<div class="row">
 		<div class="col-xs-2 text-right">
 			<p><?php echo $customtype->labels->name; ?> (<?php echo $cpt_status['total']; ?>)</p>
 		</div>
@@ -72,8 +76,10 @@ $tipp_cpt 	= $this->tipp_get_cpt();
 				<div class="progress-bar progress-bar-danger" style="width: 100%"><?php _e('Nothing Found', $this->plugin_slug); ?></div>
 			</div>
 		</div>
+	</div>
 
 	 	<?php else: ?>
+	<div class="row">
 		<div class="col-xs-2 text-right">
 			<p><?php echo $customtype->labels->name; ?> (<?php echo $cpt_status['total']; ?>)</p>
 		</div>
@@ -86,6 +92,7 @@ $tipp_cpt 	= $this->tipp_get_cpt();
 				<div class="progress-bar progress-bar-info" style="width: <?php echo $cpt_status['private']; ?>%"><?php _e('Private', $this->plugin_slug); ?></div>
 			</div>
 		</div>
+	</div>
 
 <?php
 		endif;
@@ -93,7 +100,6 @@ $tipp_cpt 	= $this->tipp_get_cpt();
 endif; // end of have custom post types
 ?>
 
-	</div>
 	<hr>
 	<h3><?php _e('Issues Summary', $this->plugin_slug); ?></h3>
 <?php 

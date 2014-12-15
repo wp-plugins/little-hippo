@@ -1,10 +1,10 @@
 === Little Hippo ===
-Contributors: erbuc
+Contributors: erbuc, benjaminspowell, Cornelis-DSA
 Donate link: http://www.littlehippo.co/donate/
-Tags: little hippo, search engine optimization, seo, seo tools, image tagger, bulk editor
+Tags: little hippo, search engine optimization, seo, seo tools, image tagger, bulk editor, seo plugin, seo plug-in
 Requires at least: 3.5.1
 Tested up to: 4.0
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 
 Little Hippo is a multifunction plugin for agencies and site owners that speeds up the process
@@ -30,6 +30,11 @@ management, Redirect management, robots and HT access management, webmaster tool
 and much more.
 
 Little hippo will be the first and last SEO plugin that you will need to install on any site!
+
+Many thanks to the following people:
+
+Tom McFarlin - WordPress Plugin Boilerplate (https://tommcfarlin.com/wordpress-plugin-boilerplate/)
+Borisa Djuraskovic - Serbo-Croatian Translation (http://www.webhostinghub.com/)
 
 ## Features:
 
@@ -115,6 +120,11 @@ Yes of course, please contact us and we can discuss how we can help!
 All screenshots can be viewed on the [Little Hippo website](http://littlehippo.co/screenshots/ "Little Hippo Screenshots").
 
 == Changelog ==
+
+= 1.1.3 =
+* Removed lower limit of characters for Image Titles
+* Added language - Serbo-Croatian by Borisa Djuraskovic (http://www.webhostinghub.com/)
+* Minor layout issues fixed
 
 = 1.0.1 = 
 * Fixed pagination for Image Issues
