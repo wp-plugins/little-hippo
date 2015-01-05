@@ -21,7 +21,7 @@ class Tipp {
 	 * @since   0.0.0
 	 * @var     string
 	 */
-	const VERSION = '1.1.3';
+	const VERSION = '1.1.4';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -496,6 +496,7 @@ class Tipp {
 			echo "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n";
 
 			echo "ga('create', '" . $ga_id . "', {'siteSpeedSampleRate': 100}); \n";
+			echo "ga('require', 'displayfeatures');\n";
 			echo "ga('send', 'pageview');\n";
 
 			echo "setTimeout('_gaq.push([\'_trackEvent\', \'NoBounce\', \'Over 10 seconds\'])'," . $ga_te_to . ");\n";

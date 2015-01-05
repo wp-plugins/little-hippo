@@ -15,7 +15,7 @@
  * Plugin Name:       Little Hippo (Makes your BIG job small)
  * Plugin URI:        http://http://www.littlehippo.co/
  * Description:       Manage meta tags for images, pages and posts in bulk via the WordPress dashboard
- * Version:           1.1.3
+ * Version:           1.1.4
  * Author:            DoSA (Do Something Awesome)
  * Author URI:        http://www.dsa-global.com/
  * Text Domain:       tipp
